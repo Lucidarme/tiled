@@ -55,6 +55,8 @@ public:
 
     MapDocument *dummyMapDocument() const;
 
+    ToolManager *toolManager() const;
+
     bool hasSelectedObjects() const;
 
 signals:
@@ -100,6 +102,11 @@ private:
 inline MapDocument *TileCollisionDock::dummyMapDocument() const
 {
     return mDummyMapDocument;
+}
+
+inline ToolManager *TileCollisionDock::toolManager() const
+{
+    return mToolManager;
 }
 
 inline bool TileCollisionDock::hasSelectedObjects() const

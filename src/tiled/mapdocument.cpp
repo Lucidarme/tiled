@@ -54,6 +54,7 @@
 #include "resizetilelayer.h"
 #include "rotatemapobject.h"
 #include "staggeredrenderer.h"
+#include "templatemanager.h"
 #include "terrain.h"
 #include "tile.h"
 #include "tilelayer.h"
@@ -111,6 +112,9 @@ MapDocument::MapDocument(Map *map, const QString &fileName)
             SLOT(onMapObjectModelRowsInsertedOrRemoved(QModelIndex,int,int)));
     connect(mMapObjectModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             SLOT(onObjectsMoved(QModelIndex,int,int,QModelIndex,int)));
+
+    connect(TemplateManager::instance(), &TemplateManager::objectTemplateChanged,
+            this, &MapDocument::updateTemplateInstances);
 }
 
 MapDocument::~MapDocument()

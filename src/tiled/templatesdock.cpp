@@ -86,8 +86,6 @@ TemplatesDock::TemplatesDock(QWidget *parent)
     Utils::setThemeIcon(mChooseDirectory, "document-open");
     connect(mChooseDirectory, &QAction::triggered, this, &TemplatesDock::chooseDirectory);
 
-    connect(this, &TemplatesDock::setTile, mToolManager, &ToolManager::setTile);
-
     toolBar->addAction(mChooseDirectory);
 
     mUndoAction->setIcon(QIcon(QLatin1String(":/images/16x16/edit-undo.png")));
@@ -187,6 +185,11 @@ TemplatesDock::~TemplatesDock()
     }
 
     delete mDummyMapDocument;
+}
+
+void TemplatesDock::setTile(Tile *tile)
+{
+    mToolManager->setTile(tile);
 }
 
 void TemplatesDock::openTemplate(const QString &path)
@@ -346,7 +349,7 @@ void TemplatesDock::applyChanges()
 
     checkTileset();
 
-    emit templateEdited(mObjectTemplate);
+    emit TemplateManager::instance()->objectTemplateChanged(mObjectTemplate);
 }
 
 void TemplatesDock::chooseDirectory()

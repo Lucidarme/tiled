@@ -51,14 +51,13 @@ class TemplatesDock : public QDockWidget
 
 public:
     TemplatesDock(QWidget *parent = nullptr);
-    ~TemplatesDock();
+    ~TemplatesDock() override;
 
     void setPropertiesDock(PropertiesDock *propertiesDock);
+    void setTile(Tile *tile);
 
 signals:
     void currentTemplateChanged(ObjectTemplate *objectTemplate);
-    void templateEdited(const ObjectTemplate *objectTemplate);
-    void setTile(Tile *tile);
     void templateTilesetReplaced();
 
 public slots:

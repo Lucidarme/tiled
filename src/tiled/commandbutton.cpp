@@ -36,7 +36,7 @@ CommandButton::CommandButton(QWidget *parent)
     : QToolButton(parent)
     , mMenu(new QMenu(this))
 {
-    setIcon(QIcon(QLatin1String(":images/24x24/system-run.png")));
+    setIcon(QIcon(QLatin1String(":images/24x24/play.png")));
     setThemeIcon(this, "system-run");
     retranslateUi();
 
@@ -50,7 +50,7 @@ CommandButton::CommandButton(QWidget *parent)
 
 void CommandButton::runCommand()
 {
-    Command command;
+    /* Command command;
 
     QAction *action = dynamic_cast<QAction*>(sender());
     if (action && action->data().isValid()) {
@@ -78,7 +78,29 @@ void CommandButton::runCommand()
         }
     }
 
-    command.execute();
+    command.execute(); */
+    qDebug() << "openGame";
+
+    cmd = new QProcess(this);
+    connect( cmd, SIGNAL(readyReadStandardError()), this, SLOT(handleReadStandardError()) );
+    connect( cmd, SIGNAL(readyReadStandardOutput()), this, SLOT(handleReadStandardOutput()) );
+
+    QStringList arguments;
+    arguments << QLatin1String("-jar") << QLatin1String("desktop-1.0.jar");
+    cmd->start(QLatin1String("java"),  arguments);
+
+    if ( cmd->state() == QProcess::NotRunning ) {
+       qDebug() << "The process is not running.It exits";
+    }
+    else if ( cmd->state() == QProcess::Starting ) {
+        qDebug() << "The process is started, but the program has not yet been invoked.";
+    }else if ( cmd->state() == QProcess::Running ) {
+        qDebug() << "The process is running and is ready for reading and writing.";
+    }
+
+    if (!cmd->waitForStarted())  {
+       qDebug() << "Not yet started";
+    }
 }
 
 void CommandButton::showDialog()
@@ -103,4 +125,17 @@ void CommandButton::changeEvent(QEvent *event)
 void CommandButton::retranslateUi()
 {
     setToolTip(tr("Execute Command"));
+}
+
+void CommandButton::handleReadStandardError()
+{
+    QByteArray data = cmd->readAllStandardError();
+    qDebug() << data;
+}
+
+void CommandButton::handleReadStandardOutput()
+{
+   QByteArray data = cmd->readAllStandardOutput();
+   qDebug() << "Data:\n" << data << endl;
+
 }

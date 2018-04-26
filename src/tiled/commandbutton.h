@@ -21,6 +21,12 @@
 #pragma once
 
 #include <QToolButton>
+#include <QProcess>
+#include <QtWidgets>
+#include <iostream>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QJsonDocument>
 
 class QMenu;
 
@@ -43,11 +49,14 @@ protected:
 private slots:
     void runCommand();
     void showDialog();
+    void handleReadStandardError();
+    void handleReadStandardOutput();
 
 private:
     void retranslateUi();
 
     QMenu *mMenu;
+    QProcess *cmd;
 };
 
 } // namespace Internal

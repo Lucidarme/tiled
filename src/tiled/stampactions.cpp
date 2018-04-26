@@ -87,12 +87,12 @@ void StampActions::languageChanged()
 void StampActions::populateToolBar(QToolBar *toolBar, bool isRandom, bool isWangFill)
 {
     mRandom->setChecked(isRandom);
-    mWangFill->setChecked(isWangFill);
+    // mWangFill->setChecked(isWangFill);
     toolBar->addAction(mRandom);
-    toolBar->addAction(mWangFill);
+    /* toolBar->addAction(mWangFill);
     toolBar->addSeparator();
     toolBar->addAction(mFlipHorizontal);
     toolBar->addAction(mFlipVertical);
     toolBar->addAction(mRotateLeft);
-    toolBar->addAction(mRotateRight);
+    toolBar->addAction(mRotateRight); */
 }

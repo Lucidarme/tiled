@@ -41,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>553</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -617,6 +617,11 @@
    </property>
    <property name="text">
     <string>For Hovered Object</string>
+   </property>
+  </action>
+  <action name="actionProut">
+   <property name="text">
+    <string>Prout</string>
    </property>
   </action>
  </widget>

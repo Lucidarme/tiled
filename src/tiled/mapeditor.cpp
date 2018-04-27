@@ -188,15 +188,15 @@ MapEditor::MapEditor(QObject *parent)
     CreateObjectTool *textObjectsTool = new CreateTextObjectTool(this);
 
     mToolsToolBar->addAction(mToolManager->registerTool(mStampBrush));
-    /* mToolsToolBar->addAction(mToolManager->registerTool(mTerrainBrush));
-    mToolsToolBar->addAction(mToolManager->registerTool(mWangBrush));
-    mToolsToolBar->addAction(mToolManager->registerTool(mBucketFillTool));
-    mToolsToolBar->addAction(mToolManager->registerTool(mShapeFillTool));
+    // mToolsToolBar->addAction(mToolManager->registerTool(mTerrainBrush));
+    // mToolsToolBar->addAction(mToolManager->registerTool(mWangBrush));
+    // mToolsToolBar->addAction(mToolManager->registerTool(mBucketFillTool));
+    // mToolsToolBar->addAction(mToolManager->registerTool(mShapeFillTool));
     mToolsToolBar->addAction(mToolManager->registerTool(new Eraser(this)));
     mToolsToolBar->addAction(mToolManager->registerTool(new TileSelectionTool(this)));
-    mToolsToolBar->addAction(mToolManager->registerTool(new MagicWandTool(this)));
-    mToolsToolBar->addAction(mToolManager->registerTool(new SelectSameTileTool(this)));
-    mToolsToolBar->addSeparator();
+    // mToolsToolBar->addAction(mToolManager->registerTool(new MagicWandTool(this)));
+    // mToolsToolBar->addAction(mToolManager->registerTool(new SelectSameTileTool(this)));
+    /* mToolsToolBar->addSeparator();
     mToolsToolBar->addAction(mToolManager->registerTool(new ObjectSelectionTool(this)));
     mToolsToolBar->addAction(mToolManager->registerTool(mEditPolygonTool));
     mToolsToolBar->addAction(mToolManager->registerTool(rectangleObjectsTool));
@@ -206,8 +206,8 @@ MapEditor::MapEditor(QObject *parent)
     mToolsToolBar->addAction(mToolManager->registerTool(tileObjectsTool));
     mToolsToolBar->addAction(mToolManager->registerTool(templatesTool));
     mToolsToolBar->addAction(mToolManager->registerTool(textObjectsTool));
-    mToolsToolBar->addSeparator();
-    mToolsToolBar->addAction(mToolManager->registerTool(new LayerOffsetTool(this))); */
+    mToolsToolBar->addSeparator(); */
+    mToolsToolBar->addAction(mToolManager->registerTool(new LayerOffsetTool(this)));
 
     mToolManager->createShortcuts(mMainWindow);
 

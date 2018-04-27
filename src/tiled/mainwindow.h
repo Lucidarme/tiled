@@ -94,6 +94,8 @@ public:
 
 public slots:
     bool openFile(const QString &fileName);
+    void exportAs(bool autoExport = false);
+
 
 protected:
     bool event(QEvent *event) override;
@@ -114,7 +116,6 @@ private slots:
     bool saveFileAs();
     void saveAll();
     void export_(); // 'export' is a reserved word
-    void exportAs();
     void exportAsImage();
     void reload();
     void closeFile();
@@ -193,7 +194,7 @@ private:
 
     void retranslateUi();
 
-    void exportMapAs(MapDocument *mapDocument);
+    void exportMapAs(MapDocument *mapDocument, bool autoExport);
     void exportTilesetAs(TilesetDocument *tilesetDocument);
 
     ActionManager *mActionManager;

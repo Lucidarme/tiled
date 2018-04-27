@@ -79,6 +79,7 @@ void CommandButton::runCommand()
     }
 
     command.execute(); */
+
     qDebug() << "openGame";
 
     cmd = new QProcess(this);

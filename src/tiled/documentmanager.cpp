@@ -58,6 +58,8 @@
 #include <QUndoGroup>
 #include <QUndoStack>
 #include <QVBoxLayout>
+#include <QTextStream>
+#include <iostream>
 
 #include "qtcompat_p.h"
 

@@ -120,7 +120,8 @@ template <typename Format>
 ExportDetails<Format> chooseExportDetails(const QString &fileName,
                                           const QString &lastExportName,
                                           const QString &lastExportFilter,
-                                          QWidget* window)
+                                          QWidget* window,
+                                          bool autoExport = false)
 {
     FormatHelper<Format> helper(FileFormat::Write, MainWindow::tr("All Files (*)"));
 
@@ -145,11 +146,17 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
     }
 
     // No need to confirm overwrite here since it'll be prompted below
-    QString exportToFileName = QFileDialog::getSaveFileName(window, MainWindow::tr("Export As..."),
-                                                    suggestedFilename,
-                                                    helper.filter(),
-                                                    &selectedFilter,
-                                                    QFileDialog::DontConfirmOverwrite);
+    QString exportToFileName;
+    if(autoExport) {
+        exportToFileName = QLatin1String("newmap.json");
+    } else{
+        exportToFileName = QFileDialog::getSaveFileName(window, MainWindow::tr("Export As..."),
+                                                        suggestedFilename,
+                                                        helper.filter(),
+                                                        &selectedFilter,
+                                                        QFileDialog::DontConfirmOverwrite);
+    }
+
     if (exportToFileName.isEmpty())
         return ExportDetails<Format>();
 
@@ -915,10 +922,12 @@ void MainWindow::export_()
     exportAs();
 }
 
-void MainWindow::exportAs()
+void MainWindow::exportAs(bool autoExport)
 {
+    QTextStream out(stdout);
+    out << "exportAs()" << endl;
     if (auto mapDocument = qobject_cast<MapDocument*>(mDocument)) {
-        exportMapAs(mapDocument);
+        exportMapAs(mapDocument, autoExport);
     } else if (auto tilesetDocument = qobject_cast<TilesetDocument*>(mDocument)) {
         exportTilesetAs(tilesetDocument);
     }
@@ -1522,15 +1531,20 @@ void MainWindow::retranslateUi()
     CommandManager::instance()->retranslateUi();
 }
 
-void MainWindow::exportMapAs(MapDocument *mapDocument)
+void MainWindow::exportMapAs(MapDocument *mapDocument, bool autoExport)
 {
     QString fileName = mapDocument->fileName();
+    QTextStream out(stdout);
+    out << "filename = ";
+    out << fileName << endl;
     QString selectedFilter =
             mSettings.value(QLatin1String("lastUsedExportFilter")).toString();
     auto exportDetails = chooseExportDetails<MapFormat>(fileName,
                                                         mapDocument->lastExportFileName(),
                                                         selectedFilter,
-                                                        this);
+                                                        this,
+                                                        autoExport);
+
     if (!exportDetails.isValid()) {
         return;
     }
@@ -1539,6 +1553,16 @@ void MainWindow::exportMapAs(MapDocument *mapDocument)
     // could save to multiple files at the same time. For example CSV saves
     // each layer into a separate file.
     QStringList outputFiles = exportDetails.mFormat->outputFiles(mapDocument->map(), exportDetails.mFileName);
+
+    out << "exportDetails = ";
+    out << exportDetails.mFileName << endl;
+    out << "\n output Files = " << endl;
+    foreach(QString x, outputFiles)
+        out << x << endl;
+
+
+
+
     if (outputFiles.size() > 0) {
         // Check if any output file already exists
         QString message =

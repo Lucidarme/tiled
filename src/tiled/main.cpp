@@ -42,6 +42,7 @@
 #include <QJsonDocument>
 #include <QtPlugin>
 
+
 #ifdef Q_OS_WIN
 #include <windows.h>
 #if QT_VERSION >= 0x050700

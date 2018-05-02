@@ -53,6 +53,7 @@ private:
     QAction *mSaveAction;
     QAction *mUndoAction;
     QAction *mRedoAction;
+    QAction *mRunAction;
     CommandButton *mCommandButton;
 };
 

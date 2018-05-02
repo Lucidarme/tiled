@@ -211,6 +211,7 @@ signals:
     void fileSaveRequested();
     void templateOpenRequested(const QString &path);
     void templateTilesetReplaced();
+    void RunRequested();
 
     /**
      * Emitted when the current displayed map document changed.
@@ -242,6 +243,7 @@ public slots:
     void openFile();
     void openFile(const QString &path);
     void saveFile();
+    void run();
 
 private slots:
     void currentIndexChanged();

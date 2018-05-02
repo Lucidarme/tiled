@@ -619,11 +619,6 @@
     <string>For Hovered Object</string>
    </property>
   </action>
-  <action name="actionProut">
-   <property name="text">
-    <string>Prout</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

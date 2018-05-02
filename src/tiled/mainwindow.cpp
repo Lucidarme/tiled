@@ -123,6 +123,8 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
                                           QWidget* window,
                                           bool autoExport = false)
 {
+    QTextStream out(stdout);
+    out << "chooseExportDetails" << endl;
     FormatHelper<Format> helper(FileFormat::Write, MainWindow::tr("All Files (*)"));
 
     Preferences *pref = Preferences::instance();
@@ -513,6 +515,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     connect(mDocumentManager, SIGNAL(reloadError(QString)),
             this, SLOT(reloadError(QString)));
 
+    connect(mDocumentManager, SIGNAL(RunRequested()), this, SLOT(run()));
+
     connect(mResetToDefaultLayout, &QAction::triggered, this, &MainWindow::resetToDefaultLayout);
 
     QShortcut *switchToLeftDocument = new QShortcut(tr("Alt+Left"), this);
@@ -576,6 +580,36 @@ MainWindow::~MainWindow()
     CommandManager::deleteInstance();
 
     delete mUi;
+}
+
+void MainWindow::run() {
+    exportAs(true);
+    runGame();
+}
+
+void MainWindow::runGame() {
+    qDebug() << "openGame";
+
+    cmd = new QProcess(this);
+    connect( cmd, SIGNAL(readyReadStandardError()), this, SLOT(handleReadStandardError()) );
+    connect( cmd, SIGNAL(readyReadStandardOutput()), this, SLOT(handleReadStandardOutput()) );
+
+    QStringList arguments;
+    arguments << QLatin1String("-jar") << QLatin1String("desktop-1.0.jar");
+    cmd->start(QLatin1String("java"),  arguments);
+}
+
+void MainWindow::handleReadStandardError()
+{
+    QByteArray data = cmd->readAllStandardError();
+    qDebug() << data;
+}
+
+void MainWindow::handleReadStandardOutput()
+{
+   QByteArray data = cmd->readAllStandardOutput();
+   qDebug() << "Data:\n" << data << endl;
+
 }
 
 void MainWindow::commitData(QSessionManager &manager)
@@ -924,8 +958,6 @@ void MainWindow::export_()
 
 void MainWindow::exportAs(bool autoExport)
 {
-    QTextStream out(stdout);
-    out << "exportAs()" << endl;
     if (auto mapDocument = qobject_cast<MapDocument*>(mDocument)) {
         exportMapAs(mapDocument, autoExport);
     } else if (auto tilesetDocument = qobject_cast<TilesetDocument*>(mDocument)) {
@@ -1535,8 +1567,7 @@ void MainWindow::exportMapAs(MapDocument *mapDocument, bool autoExport)
 {
     QString fileName = mapDocument->fileName();
     QTextStream out(stdout);
-    out << "filename = ";
-    out << fileName << endl;
+
     QString selectedFilter =
             mSettings.value(QLatin1String("lastUsedExportFilter")).toString();
     auto exportDetails = chooseExportDetails<MapFormat>(fileName,
@@ -1553,12 +1584,6 @@ void MainWindow::exportMapAs(MapDocument *mapDocument, bool autoExport)
     // could save to multiple files at the same time. For example CSV saves
     // each layer into a separate file.
     QStringList outputFiles = exportDetails.mFormat->outputFiles(mapDocument->map(), exportDetails.mFileName);
-
-    out << "exportDetails = ";
-    out << exportDetails.mFileName << endl;
-    out << "\n output Files = " << endl;
-    foreach(QString x, outputFiles)
-        out << x << endl;
 
 
 
@@ -1579,7 +1604,7 @@ void MainWindow::exportMapAs(MapDocument *mapDocument, bool autoExport)
         message += QLatin1Char('\n') + tr("Do you want to replace them?");
 
         // If overwrite happens, warn the user and get confirmation before exporting
-        if (overwriteHappens) {
+        if (overwriteHappens && !autoExport) {
             const QMessageBox::StandardButton reply = QMessageBox::warning(
                                                           this,
                                                           tr("Overwrite Files"),

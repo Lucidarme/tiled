@@ -33,6 +33,7 @@
 #include <QPointer>
 #include <QSessionManager>
 #include <QSettings>
+#include <QProcess>
 
 class QComboBox;
 class QLabel;
@@ -95,6 +96,7 @@ public:
 public slots:
     bool openFile(const QString &fileName);
     void exportAs(bool autoExport = false);
+    void run();
 
 
 protected:
@@ -165,6 +167,9 @@ private slots:
 
     void ensureHasBorderInFullScreen();
 
+    void handleReadStandardError();
+    void handleReadStandardOutput();
+
 private:
     /**
       * Asks the user whether the given \a mapDocument should be saved, when
@@ -197,6 +202,8 @@ private:
     void exportMapAs(MapDocument *mapDocument, bool autoExport);
     void exportTilesetAs(TilesetDocument *tilesetDocument);
 
+    void runGame();
+
     ActionManager *mActionManager;
     Ui::MainWindow *mUi;
     Document *mDocument = nullptr;
@@ -225,6 +232,8 @@ private:
     QPointer<PreferencesDialog> mPreferencesDialog;
 
     QMap<QMainWindow*, QByteArray> mMainWindowStates;
+
+    QProcess *cmd;
 };
 
 } // namespace Internal

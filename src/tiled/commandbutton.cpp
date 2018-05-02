@@ -22,6 +22,8 @@
 #include "commanddatamodel.h"
 #include "commanddialog.h"
 #include "commandmanager.h"
+#include "maintoolbar.h"
+#include "mainwindow.h"
 #include "utils.h"
 
 #include <QEvent>
@@ -36,13 +38,12 @@ CommandButton::CommandButton(QWidget *parent)
     : QToolButton(parent)
     , mMenu(new QMenu(this))
 {
-    setIcon(QIcon(QLatin1String(":images/24x24/play.png")));
+    setIcon(QIcon(QLatin1String(":images/24x24/system-run.png")));
     setThemeIcon(this, "system-run");
     retranslateUi();
 
     setPopupMode(QToolButton::MenuButtonPopup);
     setMenu(mMenu);
-
     CommandManager::instance()->registerMenu(mMenu);
 
     connect(this, SIGNAL(clicked()), SLOT(runCommand()));
@@ -50,36 +51,6 @@ CommandButton::CommandButton(QWidget *parent)
 
 void CommandButton::runCommand()
 {
-    /* Command command;
-
-    QAction *action = dynamic_cast<QAction*>(sender());
-    if (action && action->data().isValid()) {
-        //run the command passed by the action
-        command = Command::fromQVariant(action->data());
-    } else {
-        //run the default command
-        command = CommandDataModel().firstEnabledCommand();
-
-        if (!command.isEnabled) {
-            QMessageBox msgBox(window());
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setWindowTitle(tr("Error Executing Command"));
-            msgBox.setText(tr("You do not have any commands setup."));
-            msgBox.addButton(QMessageBox::Ok);
-            msgBox.addButton(tr("Edit commands..."), QMessageBox::ActionRole);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-            msgBox.setEscapeButton(QMessageBox::Ok);
-
-            QAbstractButton *button = msgBox.buttons().last();
-            connect(button, SIGNAL(clicked()), SLOT(showDialog()));
-
-            msgBox.exec();
-            return;
-        }
-    }
-
-    command.execute(); */
-
     qDebug() << "openGame";
 
     cmd = new QProcess(this);

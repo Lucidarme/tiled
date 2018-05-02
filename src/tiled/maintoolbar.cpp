@@ -47,16 +47,20 @@ MainToolBar::MainToolBar(QWidget *parent)
     QIcon saveIcon(QLatin1String(":images/24x24/document-save.png"));
     QIcon undoIcon(QLatin1String(":images/24x24/edit-undo.png"));
     QIcon redoIcon(QLatin1String(":images/24x24/edit-redo.png"));
+    QIcon runIcon (QLatin1String(":images/24x24/play.png"));
 
     newIcon.addFile(QLatin1String(":images/16x16/document-new.png"));
     openIcon.addFile(QLatin1String(":images/16x16/document-open.png"));
     saveIcon.addFile(QLatin1String(":images/16x16/document-save.png"));
     redoIcon.addFile(QLatin1String(":images/16x16/edit-redo.png"));
     undoIcon.addFile(QLatin1String(":images/16x16/edit-undo.png"));
+    runIcon.addFile(QLatin1String(":images/24x24/play.png"));
 
     mNewButton = new QToolButton(this);
     mOpenAction = new QAction(this);
     mSaveAction = new QAction(this);
+    mRunAction = new QAction(this);
+
 
     QMenu *newMenu = new QMenu(this);
     newMenu->addAction(ActionManager::action("file.new_map"));
@@ -73,6 +77,7 @@ MainToolBar::MainToolBar(QWidget *parent)
     mSaveAction->setIcon(saveIcon);
     mUndoAction->setIcon(undoIcon);
     mRedoAction->setIcon(redoIcon);
+    mRunAction->setIcon(runIcon);
 
     Utils::setThemeIcon(mNewButton, "document-new");
     Utils::setThemeIcon(mOpenAction, "document-open");
@@ -90,10 +95,14 @@ MainToolBar::MainToolBar(QWidget *parent)
     addAction(mRedoAction);
     addSeparator();
     addWidget(mCommandButton);
+    addSeparator();
+    addAction(mRunAction);
+
 
     DocumentManager *documentManager = DocumentManager::instance();
     connect(mOpenAction, SIGNAL(triggered(bool)), documentManager, SLOT(openFile()));
     connect(mSaveAction, SIGNAL(triggered(bool)), documentManager, SLOT(saveFile()));
+    connect(mRunAction, SIGNAL(triggered(bool)), documentManager, SLOT(run()));
 
     connect(documentManager, &DocumentManager::currentDocumentChanged,
             this, &MainToolBar::currentDocumentChanged);

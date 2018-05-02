@@ -297,6 +297,10 @@ void DocumentManager::saveFile()
     emit fileSaveRequested();
 }
 
+void DocumentManager::run() {
+    emit RunRequested();
+}
+
 void DocumentManager::addDocument(Document *document)
 {
     Q_ASSERT(document);

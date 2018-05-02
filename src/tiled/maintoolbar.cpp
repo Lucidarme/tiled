@@ -36,7 +36,6 @@ namespace Internal {
 
 MainToolBar::MainToolBar(QWidget *parent)
     : QToolBar(parent)
-    , mCommandButton(new CommandButton(this))
 {
     setObjectName(QLatin1String("MainToolBar"));
     setWindowTitle(tr("Main Toolbar"));
@@ -64,7 +63,7 @@ MainToolBar::MainToolBar(QWidget *parent)
 
     QMenu *newMenu = new QMenu(this);
     newMenu->addAction(ActionManager::action("file.new_map"));
-    newMenu->addAction(ActionManager::action("file.new_tileset"));
+    // newMenu->addAction(ActionManager::action("file.new_tileset"));
     mNewButton->setMenu(newMenu);
     mNewButton->setPopupMode(QToolButton::InstantPopup);
 
@@ -93,8 +92,6 @@ MainToolBar::MainToolBar(QWidget *parent)
     addSeparator();
     addAction(mUndoAction);
     addAction(mRedoAction);
-    addSeparator();
-    addWidget(mCommandButton);
     addSeparator();
     addAction(mRunAction);
 
@@ -134,7 +131,6 @@ void MainToolBar::onOrientationChanged(Qt::Orientation orientation)
 void MainToolBar::currentDocumentChanged(Document *document)
 {
     mSaveAction->setEnabled(document);
-    mCommandButton->setEnabled(document && !document->fileName().isEmpty());
 }
 
 void MainToolBar::retranslateUi()

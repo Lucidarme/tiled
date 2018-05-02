@@ -54,7 +54,6 @@ private:
     QAction *mUndoAction;
     QAction *mRedoAction;
     QAction *mRunAction;
-    CommandButton *mCommandButton;
 };
 
 } // namespace Internal

@@ -89,6 +89,7 @@
 #include <QUndoGroup>
 #include <QUndoStack>
 #include <QUndoView>
+#include <stdexcept>
 
 #ifdef Q_OS_WIN
 #include <QtPlatformHeaders\QWindowsWindowFunctions>
@@ -584,6 +585,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::run() {
     exportAs(true);
+    if(!verifyJsonBeforeRunGame()) {
+        return;
+    }
     runGame();
 }
 
@@ -597,6 +601,71 @@ void MainWindow::runGame() {
     QStringList arguments;
     arguments << QLatin1String("-jar") << QLatin1String("desktop-1.0.jar");
     cmd->start(QLatin1String("java"),  arguments);
+}
+
+bool MainWindow::verifyJsonBeforeRunGame() {
+    QFile file(QLatin1String("newmap.json"));
+    if (!file.exists()) {
+        QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("This file does not exist"));
+        return false;
+    }
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, QLatin1String("Error"), file.errorString());
+        return false;
+    }
+    QString val = QLatin1String(file.readAll());
+    file.close();
+
+    QLatin1String err;
+    if(!verifyJson(val, err)) {
+        QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Your level is not in the correct format. Please look in the \"help\" tab for rules and common errors. \n\nYour error: \n") + err);
+        return false;
+    }
+    return true;
+}
+
+bool MainWindow::verifyJson(QString json, QLatin1String & err) {
+    int beginIndex;
+    QJsonArray data;
+    qDebug() << "verify json" << endl;
+    try {
+        QJsonObject json1Step = (QJsonDocument::fromJson(json.toUtf8())).object();
+        QJsonArray tilesets = json1Step[QLatin1String("tilesets")].toArray();
+        if(tilesets.size() < 3)
+            throw std::runtime_error("");
+
+        QJsonObject beginObject = tilesets[2].toObject();
+        if(!beginObject.contains(QLatin1String("firstgid")))
+            throw std::runtime_error("");
+        beginIndex = beginObject.value(QLatin1String("firstgid")).toInt();
+
+
+        QJsonArray layers = json1Step[QLatin1String("layers")].toArray();
+        data = (layers[0].toObject()).value(QLatin1String("data")).toArray();
+        qDebug() << "no error";
+    } catch(std::exception & e) {
+        qDebug() << "error" << endl;
+        err = QLatin1String("Wrong file format. Are you sure to have the good template?");
+        return false;
+    }
+
+
+    int compteurBeginIndex(0);
+    for (const QJsonValue & v : data) {
+        if (v.toInt() == beginIndex) {
+            ++compteurBeginIndex;
+        }
+    }
+
+    if(compteurBeginIndex != 1){
+        if(compteurBeginIndex == 0) {
+            err = QLatin1String("There is no start.");
+        }else {
+            err = QLatin1String("There is too much starts. You can set only one.");
+        }
+        return false;
+    }
+    return true;
 }
 
 void MainWindow::handleReadStandardError()

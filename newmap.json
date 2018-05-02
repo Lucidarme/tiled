@@ -21,7 +21,12 @@
  "tileheight":32,
  "tilesets":[
         {
-         "firstgid":1,
+         "source":"..\/..\/..\/Desktop\/random.tsx"
+        },
+    	{
+         "source":"..\/..\/..\/Desktop\/random.tsx"
+        },
+    	{
          "source":"..\/..\/..\/Desktop\/random.tsx"
         }],
  "tilewidth":32,

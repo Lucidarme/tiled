@@ -203,6 +203,8 @@ private:
     void exportTilesetAs(TilesetDocument *tilesetDocument);
 
     void runGame();
+    bool verifyJsonBeforeRunGame();
+    bool verifyJson(QString json, QLatin1String & err);
 
     ActionManager *mActionManager;
     Ui::MainWindow *mUi;

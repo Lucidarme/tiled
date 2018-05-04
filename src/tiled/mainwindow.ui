@@ -58,32 +58,15 @@
      </property>
      <addaction name="actionClearRecentFiles"/>
     </widget>
-    <widget class="QMenu" name="menuNew">
-     <property name="title">
-      <string>&amp;New</string>
-     </property>
-     <addaction name="actionNewMap"/>
-     <addaction name="actionNewTileset"/>
-    </widget>
-    <widget class="QMenu" name="menuCommand">
-     <property name="title">
-      <string>Commands</string>
-     </property>
-     <addaction name="actionEditCommands"/>
-    </widget>
-    <addaction name="menuNew"/>
+    <addaction name="actionNewMap"/>
     <addaction name="actionOpen"/>
     <addaction name="menuRecentFiles"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
-    <addaction name="actionSaveAll"/>
     <addaction name="actionExport"/>
-    <addaction name="actionExportAs"/>
     <addaction name="actionExportAsImage"/>
     <addaction name="actionReload"/>
-    <addaction name="separator"/>
-    <addaction name="menuCommand"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="actionCloseAll"/>
@@ -105,8 +88,6 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="actionDocumentation"/>
-    <addaction name="separator"/>
     <addaction name="actionBecomePatron"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -114,8 +95,6 @@
     <property name="title">
      <string>&amp;Map</string>
     </property>
-    <addaction name="actionAddExternalTileset"/>
-    <addaction name="separator"/>
     <addaction name="actionResizeMap"/>
     <addaction name="actionOffsetMap"/>
     <addaction name="separator"/>
@@ -150,7 +129,6 @@
     <addaction name="actionShowGrid"/>
     <addaction name="actionShowTileObjectOutlines"/>
     <addaction name="menuShowObjectNames"/>
-    <addaction name="actionShowTileAnimations"/>
     <addaction name="actionHighlightCurrentLayer"/>
     <addaction name="separator"/>
     <addaction name="menuSnapping"/>
@@ -162,17 +140,10 @@
     <addaction name="actionFullScreen"/>
     <addaction name="actionClearView"/>
    </widget>
-   <widget class="QMenu" name="menuTileset">
-    <property name="title">
-     <string>Tileset</string>
-    </property>
-    <addaction name="actionTilesetProperties"/>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuMap"/>
-   <addaction name="menuTileset"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionOpen">

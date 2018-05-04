@@ -172,11 +172,11 @@ private:
     TileLayer *mCurrentTiles;
     const Terrain *mTerrain;
 
-    QAction *mNewTileset;
+    /* QAction *mNewTileset;
     QAction *mEmbedTileset;
     QAction *mExportTileset;
     QAction *mEditTileset;
-    QAction *mDeleteTileset;
+    QAction *mDeleteTileset; */
 
     QToolButton *mTilesetMenuButton;
     QMenu *mTilesetMenu; //opens on click of mTilesetMenu

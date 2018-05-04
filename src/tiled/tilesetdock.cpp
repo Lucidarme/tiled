@@ -81,7 +81,7 @@ public:
     explicit NoTilesetWidget(QWidget *parent = nullptr)
         : QWidget(parent)
     {
-        QPushButton *newTilesetButton = new QPushButton(this);
+        /* QPushButton *newTilesetButton = new QPushButton(this);
         newTilesetButton->setText(tr("New Tileset..."));
 
         QGridLayout *gridLayout = new QGridLayout(this);
@@ -89,7 +89,7 @@ public:
 
         connect(newTilesetButton, &QPushButton::clicked, [] {
             ActionManager::action("file.new_tileset")->trigger();
-        });
+        }); */
     }
 };
 
@@ -194,11 +194,11 @@ TilesetDock::TilesetDock(QWidget *parent)
     , mToolBar(new QToolBar)
     , mCurrentTile(nullptr)
     , mCurrentTiles(nullptr)
-    , mNewTileset(new QAction(this))
+    /* , mNewTileset(new QAction(this))
     , mEmbedTileset(new QAction(this))
     , mExportTileset(new QAction(this))
     , mEditTileset(new QAction(this))
-    , mDeleteTileset(new QAction(this))
+    , mDeleteTileset(new QAction(this)) */
     , mTilesetMenuButton(new TilesetMenuButton(this))
     , mTilesetMenu(new QMenu(this))
     , mTilesetActionGroup(new QActionGroup(this))
@@ -237,7 +237,7 @@ TilesetDock::TilesetDock(QWidget *parent)
     horizontal->addWidget(mToolBar, 1);
     vertical->addLayout(horizontal);
 
-    mNewTileset->setIcon(QIcon(QLatin1String(":images/16x16/document-new.png")));
+    /* mNewTileset->setIcon(QIcon(QLatin1String(":images/16x16/document-new.png")));
     mEmbedTileset->setIcon(QIcon(QLatin1String(":images/16x16/document-import.png")));
     mExportTileset->setIcon(QIcon(QLatin1String(":images/16x16/document-export.png")));
     mEditTileset->setIcon(QIcon(QLatin1String(":images/16x16/document-properties.png")));
@@ -260,7 +260,7 @@ TilesetDock::TilesetDock(QWidget *parent)
     mToolBar->addAction(mEmbedTileset);
     mToolBar->addAction(mExportTileset);
     mToolBar->addAction(mEditTileset);
-    mToolBar->addAction(mDeleteTileset);
+    mToolBar->addAction(mDeleteTileset); */
 
     mZoomComboBox = new QComboBox;
     horizontal->addWidget(mZoomComboBox);
@@ -485,10 +485,10 @@ void TilesetDock::updateActions()
     const bool tilesetIsDisplayed = view != nullptr;
     const auto map = mMapDocument ? mMapDocument->map() : nullptr;
 
-    mEmbedTileset->setEnabled(tilesetIsDisplayed && external);
+    /* mEmbedTileset->setEnabled(tilesetIsDisplayed && external);
     mExportTileset->setEnabled(tilesetIsDisplayed && !external);
     mEditTileset->setEnabled(tilesetIsDisplayed);
-    mDeleteTileset->setEnabled(tilesetIsDisplayed && map && contains(map->tilesets(), tileset));
+    mDeleteTileset->setEnabled(tilesetIsDisplayed && map && contains(map->tilesets(), tileset)); */
 }
 
 void TilesetDock::updateCurrentTiles()
@@ -731,11 +731,11 @@ void TilesetDock::setCurrentTile(Tile *tile)
 void TilesetDock::retranslateUi()
 {
     setWindowTitle(tr("Tilesets"));
-    mNewTileset->setText(tr("New Tileset"));
+    /* mNewTileset->setText(tr("New Tileset"));
     mEmbedTileset->setText(tr("&Embed Tileset"));
     mExportTileset->setText(tr("&Export Tileset As..."));
     mEditTileset->setText(tr("Edit Tile&set"));
-    mDeleteTileset->setText(tr("&Remove Tileset"));
+    mDeleteTileset->setText(tr("&Remove Tileset")); */
 }
 
 void TilesetDock::onTilesetRowsInserted(const QModelIndex &parent, int first, int last)

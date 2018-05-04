@@ -415,7 +415,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     connect(mUi->actionFullScreen, &QAction::toggled, this, &MainWindow::setFullScreen);
     connect(mUi->actionClearView, &QAction::toggled, this, &MainWindow::toggleClearView);
 
-    CommandManager::instance()->registerMenu(mUi->menuCommand);
+    // CommandManager::instance()->registerMenu(mUi->menuCommand);
 
     connect(mUi->actionNewTileset, SIGNAL(triggered()), SLOT(newTileset()));
     connect(mUi->actionAddExternalTileset, SIGNAL(triggered()),
@@ -447,7 +447,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     }
     mUi->menuRecentFiles->insertSeparator(mUi->actionClearRecentFiles);
 
-    setThemeIcon(mUi->menuNew, "document-new");
+    // setThemeIcon(mUi->menuNew, "document-new");
     setThemeIcon(mUi->actionOpen, "document-open");
     setThemeIcon(mUi->menuRecentFiles, "document-open-recent");
     setThemeIcon(mUi->actionClearRecentFiles, "edit-clear");
@@ -484,13 +484,13 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     mUi->menuView->insertAction(mUi->actionShowGrid, mShowObjectTypesEditor);
     mUi->menuView->insertSeparator(mUi->actionShowGrid);
 
-    mUi->menuTileset->insertAction(mUi->actionTilesetProperties, tilesetEditor->showAnimationEditor());
+    /*mUi->menuTileset->insertAction(mUi->actionTilesetProperties, tilesetEditor->showAnimationEditor());
     mUi->menuTileset->insertAction(mUi->actionTilesetProperties, tilesetEditor->editCollisionAction());
     mUi->menuTileset->insertAction(mUi->actionTilesetProperties, tilesetEditor->editTerrainAction());
     mUi->menuTileset->insertSeparator(mUi->actionTilesetProperties);
     mUi->menuTileset->insertAction(mUi->actionTilesetProperties, tilesetEditor->addTilesAction());
     mUi->menuTileset->insertAction(mUi->actionTilesetProperties, tilesetEditor->removeTilesAction());
-    mUi->menuTileset->insertSeparator(mUi->actionTilesetProperties);
+    mUi->menuTileset->insertSeparator(mUi->actionTilesetProperties);*/
 
     connect(mViewsAndToolbarsMenu, &QMenu::aboutToShow,
             this, &MainWindow::updateViewsAndToolbarsMenu);
@@ -1509,7 +1509,7 @@ void MainWindow::updateActions()
     mUi->actionMapProperties->setEnabled(mapDocument);
     mUi->actionAutoMap->setEnabled(mapDocument);
 
-    mUi->menuTileset->menuAction()->setVisible(tilesetDocument);
+    // mUi->menuTileset->menuAction()->setVisible(tilesetDocument);
     mUi->actionTilesetProperties->setEnabled(tilesetDocument);
 
     mLayerMenu->menuAction()->setVisible(mapDocument);

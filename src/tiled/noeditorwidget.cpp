@@ -36,7 +36,7 @@ NoEditorWidget::NoEditorWidget(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->newMapButton, &QPushButton::clicked, this, &NoEditorWidget::newMap);
-    connect(ui->newTilesetButton, &QPushButton::clicked, this, &NoEditorWidget::newTileset);
+    // connect(ui->newTilesetButton, &QPushButton::clicked, this, &NoEditorWidget::newTileset);
     connect(ui->openFileButton, &QPushButton::clicked, this, &NoEditorWidget::openFile);
 }
 

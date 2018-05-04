@@ -583,6 +583,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::run() {
     exportAs(true);
+
     if(!verifyJsonBeforeRunGame()) {
         return;
     }
@@ -593,11 +594,12 @@ void MainWindow::runGame() {
     qDebug() << "openGame";
 
     cmd = new QProcess(this);
+
     connect( cmd, SIGNAL(readyReadStandardError()), this, SLOT(handleReadStandardError()) );
     connect( cmd, SIGNAL(readyReadStandardOutput()), this, SLOT(handleReadStandardOutput()) );
 
     QStringList arguments;
-    arguments << QLatin1String("-jar") << QLatin1String("blocks/desktop-1.0.jar");
+    arguments << QLatin1String("-jar") << QLatin1String("desktop-1.0.jar");
     cmd->start(QLatin1String("java"),  arguments);
 }
 

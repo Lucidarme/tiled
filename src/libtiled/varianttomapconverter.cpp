@@ -148,11 +148,11 @@ ObjectTemplate *VariantToMapConverter::toObjectTemplate(const QVariant &variant,
 Properties VariantToMapConverter::toProperties(const QVariant &propertiesVariant,
                                                const QVariant &propertyTypesVariant) const
 {
-    Properties properties;
 
-    // read object-based format (1.0)
     const QVariantMap propertiesMap = propertiesVariant.toMap();
     const QVariantMap propertyTypesMap = propertyTypesVariant.toMap();
+    Properties properties;
+
     QVariantMap::const_iterator it = propertiesMap.constBegin();
     QVariantMap::const_iterator it_end = propertiesMap.constEnd();
     for (; it != it_end; ++it) {
@@ -162,19 +162,6 @@ Properties VariantToMapConverter::toProperties(const QVariant &propertiesVariant
 
         const QVariant value = fromExportValue(it.value(), type, mMapDir);
         properties[it.key()] = value;
-    }
-
-    // read array-based format (1.2)
-    const QVariantList propertiesList = propertiesVariant.toList();
-    for (const QVariant &propertyVariant : propertiesList) {
-        const QVariantMap propertyVariantMap = propertyVariant.toMap();
-        const QString propertyName = propertyVariantMap[QLatin1String("name")].toString();
-        const QString propertyType = propertyVariantMap[QLatin1String("type")].toString();
-        const QVariant propertyValue = propertyVariantMap[QLatin1String("value")];
-        int type = nameToType(propertyType);
-        if (type == QVariant::Invalid)
-            type = QVariant::String;
-        properties[propertyName] = fromExportValue(propertyValue, type, mMapDir);
     }
 
     return properties;
@@ -269,10 +256,18 @@ SharedTileset VariantToMapConverter::toTileset(const QVariant &variant)
         terrain->setProperties(extractProperties(terrainMap));
     }
 
-    // Reads tile information (everything except the properties)
-    auto readTile = [&](Tile *tile, const QVariantMap &tileVar) {
+    // Read tiles (everything except their properties)
+    const QVariantMap tilesVariantMap = variantMap[QLatin1String("tiles")].toMap();
+    QVariantMap::const_iterator it = tilesVariantMap.constBegin();
+    for (; it != tilesVariantMap.end(); ++it) {
         bool ok;
-
+        const int tileId = it.key().toInt();
+        if (tileId < 0) {
+            mError = tr("Invalid (negative) tile id: %1").arg(tileId);
+            return SharedTileset();
+        }
+        Tile *tile = tileset->findOrCreateTile(tileId);
+        const QVariantMap tileVar = it.value().toMap();
         tile->setType(tileVar[QLatin1String("type")].toString());
 
         QList<QVariant> terrains = tileVar[QLatin1String("terrain")].toList();
@@ -288,7 +283,7 @@ SharedTileset VariantToMapConverter::toTileset(const QVariant &variant)
         if (ok)
             tile->setProbability(probability);
 
-        QVariant imageVariant = tileVar[QLatin1String("image")];
+        imageVariant = tileVar[QLatin1String("image")];
         if (!imageVariant.isNull()) {
             const QUrl imagePath = toUrl(imageVariant.toString(), mMapDir);
             tileset->setTileImage(tile, QPixmap(imagePath.toLocalFile()), imagePath);
@@ -326,26 +321,10 @@ SharedTileset VariantToMapConverter::toTileset(const QVariant &variant)
             }
             tile->setFrames(frames);
         }
-    };
 
-    // Read tiles (1.0 format)
-    const QVariant tilesVariant = variantMap[QLatin1String("tiles")];
-    const QVariantMap tilesVariantMap = tilesVariant.toMap();
-    QVariantMap::const_iterator it = tilesVariantMap.constBegin();
-    for (; it != tilesVariantMap.end(); ++it) {
-        const int tileId = it.key().toInt();
-        if (tileId < 0) {
-            mError = tr("Invalid (negative) tile id: %1").arg(tileId);
-            return SharedTileset();
-        }
-
-        Tile *tile = tileset->findOrCreateTile(tileId);
-
-        const QVariantMap tileVar = it.value().toMap();
-        readTile(tile, tileVar);
     }
 
-    // Read tile properties (1.0 format)
+    // Read tile properties
     QVariantMap propertiesVariantMap = variantMap[QLatin1String("tileproperties")].toMap();
     QVariantMap propertyTypesVariantMap = variantMap[QLatin1String("tilepropertytypes")].toMap();
     for (it = propertiesVariantMap.constBegin(); it != propertiesVariantMap.constEnd(); ++it) {
@@ -356,19 +335,6 @@ SharedTileset VariantToMapConverter::toTileset(const QVariant &variant)
         tileset->findOrCreateTile(tileId)->setProperties(properties);
     }
 
-    // Read the tiles saved as a list (1.2 format)
-    const QVariantList tilesVariantList = tilesVariant.toList();
-    for (int i = 0; i < tilesVariantList.count(); ++i) {
-        const QVariantMap tileVar = tilesVariantList[i].toMap();
-        const int tileId  = tileVar[QLatin1String("id")].toInt();
-        if (tileId < 0) {
-            mError = tr("Invalid (negative) tile id: %1").arg(tileId);
-            return SharedTileset();
-        }
-        Tile *tile = tileset->findOrCreateTile(tileId);
-        readTile(tile, tileVar);
-        tile->setProperties(extractProperties(tileVar));
-    }
 
     // Read Wang sets
     const QVariantList wangSetVariants = variantMap[QLatin1String("wangsets")].toList();

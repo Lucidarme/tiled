@@ -124,8 +124,6 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
                                           QWidget* window,
                                           bool autoExport = false)
 {
-    QTextStream out(stdout);
-    out << "chooseExportDetails" << endl;
     FormatHelper<Format> helper(FileFormat::Write, MainWindow::tr("All Files (*)"));
 
     Preferences *pref = Preferences::instance();
@@ -151,7 +149,7 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
     // No need to confirm overwrite here since it'll be prompted below
     QString exportToFileName;
     if(autoExport) {
-        exportToFileName = QLatin1String("newmap.json");
+        exportToFileName = QLatin1String("blocks/newmap.json");
     } else{
         exportToFileName = QFileDialog::getSaveFileName(window, MainWindow::tr("Export As..."),
                                                         suggestedFilename,
@@ -599,12 +597,12 @@ void MainWindow::runGame() {
     connect( cmd, SIGNAL(readyReadStandardOutput()), this, SLOT(handleReadStandardOutput()) );
 
     QStringList arguments;
-    arguments << QLatin1String("-jar") << QLatin1String("desktop-1.0.jar");
+    arguments << QLatin1String("-jar") << QLatin1String("blocks/desktop-1.0.jar");
     cmd->start(QLatin1String("java"),  arguments);
 }
 
 bool MainWindow::verifyJsonBeforeRunGame() {
-    QFile file(QLatin1String("newmap.json"));
+    QFile file(QLatin1String("blocks/newmap.json"));
     if (!file.exists()) {
         QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("This file does not exist"));
         return false;
@@ -624,6 +622,7 @@ bool MainWindow::verifyJsonBeforeRunGame() {
     return true;
 }
 
+
 bool MainWindow::verifyJson(QString json, QLatin1String & err) {
     int beginIndex;
     QJsonArray data;
@@ -632,11 +631,11 @@ bool MainWindow::verifyJson(QString json, QLatin1String & err) {
         QJsonObject json1Step = (QJsonDocument::fromJson(json.toUtf8())).object();
         QJsonArray tilesets = json1Step[QLatin1String("tilesets")].toArray();
         if(tilesets.size() < 3)
-            throw std::runtime_error("");
+            throw std::runtime_error("tilesets.size < 3");
 
         QJsonObject beginObject = tilesets[2].toObject();
         if(!beginObject.contains(QLatin1String("firstgid")))
-            throw std::runtime_error("");
+            throw std::runtime_error("begin Object not contain firstgid");
         beginIndex = beginObject.value(QLatin1String("firstgid")).toInt();
 
 
@@ -645,7 +644,8 @@ bool MainWindow::verifyJson(QString json, QLatin1String & err) {
         qDebug() << "no error";
     } catch(std::exception & e) {
         qDebug() << "error" << endl;
-        err = QLatin1String("Wrong file format. Are you sure to have the good template?");
+        err = QLatin1String("Wrong file format. Are you sure to have the good template?\n");
+        qDebug() << e.what();
         return false;
     }
 

@@ -124,7 +124,7 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
                                           QWidget* window,
                                           bool autoExport = false)
 {
-    FormatHelper<Format> helper(FileFormat::Write, MainWindow::tr("All Files (*)"));
+    FormatHelper<Format> helper(FileFormat::Write, MainWindow::tr("JSON (*.json)"));
 
     Preferences *pref = Preferences::instance();
 
@@ -135,9 +135,10 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
         QFileInfo baseNameInfo = QFileInfo(fileName);
         QString baseName = baseNameInfo.baseName();
 
-        QRegExp extensionFinder(QLatin1String("\\(\\*\\.([^\\)\\s]*)"));
+        /* QRegExp extensionFinder(QLatin1String("\\(\\*\\.([^\\)\\s]*)"));
         extensionFinder.indexIn(selectedFilter);
-        const QString extension = extensionFinder.cap(1);
+        const QString extension = extensionFinder.cap(1); */
+        const QString extension = QLatin1String("json");
 
         QString lastExportedFilePath = pref->lastPath(Preferences::ExportedFile);
 
@@ -151,7 +152,7 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
     if(autoExport) {
         exportToFileName = QLatin1String("blocks/newmap.json");
     } else{
-        exportToFileName = QFileDialog::getSaveFileName(window, MainWindow::tr("Export As..."),
+        exportToFileName = QFileDialog::getSaveFileName(window, MainWindow::tr("Export..."),
                                                         suggestedFilename,
                                                         helper.filter(),
                                                         &selectedFilter,
@@ -1004,7 +1005,7 @@ void MainWindow::export_()
     if (!mapDocument)
         return;
 
-    QString exportFileName = mapDocument->lastExportFileName();
+    /* QString exportFileName = mapDocument->lastExportFileName();
 
     if (!exportFileName.isEmpty()) {
         MapFormat *exportFormat = mapDocument->exportFormat();
@@ -1021,7 +1022,7 @@ void MainWindow::export_()
 
         QMessageBox::critical(this, tr("Error Exporting Map"),
                               exportFormat->errorString());
-    }
+    } */
 
     // fall back when no successful export happened
     exportAs();

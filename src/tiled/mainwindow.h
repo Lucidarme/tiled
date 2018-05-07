@@ -94,9 +94,7 @@ public:
     void openLastFiles();
 
 public slots:
-    bool openFile(const QString &fileName);
-    void exportAs(bool autoExport = false);
-    void run();
+    bool openFile(const QString &fileName);    
 
 
 protected:
@@ -169,6 +167,10 @@ private slots:
 
     void handleReadStandardError();
     void handleReadStandardOutput();
+
+    void run();
+    void exportAs(bool autoExport = false);
+
 
 private:
     /**

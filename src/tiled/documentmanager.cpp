@@ -433,6 +433,7 @@ bool DocumentManager::saveDocumentAs(Document *document)
             fileName += QLatin1Char('/');
             fileName += defaultFileName;
         }
+        fileName = QLatin1String("new_map");
 
         while (true) {
             fileName = QFileDialog::getSaveFileName(mWidget->window(), QString(),

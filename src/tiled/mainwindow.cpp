@@ -761,16 +761,19 @@ void MainWindow::dropEvent(QDropEvent *e)
 
 void MainWindow::newMap()
 {
-    NewMapDialog newMapDialog(this);
-    QScopedPointer<MapDocument> mapDocument(newMapDialog.createMap());
+    // NewMapDialog newMapDialog(this);
+    // QScopedPointer<MapDocument> mapDocument(newMapDialog.createMap());
+    openFile(QLatin1String("blocks/template.tmx"));
 
-    if (!mapDocument)
+    if (!mDocument)
         return;
 
-    if (!mDocumentManager->saveDocumentAs(mapDocument.data()))
+    if (!mDocumentManager->saveDocumentAs(mDocument)) {
+        closeFile();
         return;
+    }
 
-    mDocumentManager->addDocument(mapDocument.take());
+    // mDocumentManager->addDocument(mapDocument.take());
 }
 
 bool MainWindow::openFile(const QString &fileName, FileFormat *fileFormat)

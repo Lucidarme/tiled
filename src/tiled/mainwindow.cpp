@@ -600,12 +600,21 @@ void MainWindow::runGame() {
     connect( cmd, SIGNAL(readyReadStandardOutput()), this, SLOT(handleReadStandardOutput()) );
 
     QStringList arguments;
-    arguments << QLatin1String("-jar") << QLatin1String("desktop-1.0.jar");
+    QString path;
+    path = qApp->applicationDirPath();
+    path += QLatin1String("/desktop-1.0.jar");
+
+    arguments << QLatin1String("-jar") << path;
     cmd->start(QLatin1String("java"),  arguments);
 }
 
 bool MainWindow::verifyJsonBeforeRunGame() {
-    QFile file(QLatin1String("blocks/newmap.json"));
+    QString path;
+    //path = qApp->applicationDirPath();
+    //path += QLatin1String("/blocks/newmap.json");
+    path = QLatin1String("blocks/newmap.json");
+    qDebug() << path;
+    QFile file(path);
     if (!file.exists()) {
         QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("This file does not exist"));
         return false;

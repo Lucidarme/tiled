@@ -522,7 +522,7 @@ manpage.path = $${PREFIX}/share/man/man1/
 manpage.files += ../../man/tiled.1
 INSTALLS += manpage
 
-RESOURCES += tiled.qrc blocks/desktop-1.0.jar
+RESOURCES += tiled.qrc
 macx {
     TARGET = Tiled
     QMAKE_INFO_PLIST = Info.plist
@@ -540,3 +540,5 @@ contains(CONFIG, static) {
         qjpeg \
         qtiff
 }
+
+OTHER_FILES += blocks/newmap.json
